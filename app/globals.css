@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+:root {
+  --primary: #7C3AED;
+  --primary-light: #A78BFA;
+  --accent: #F59E0B;
+  --accent-soft: #FEF3C7;
+  --success: #059669;
+  --danger: #DC2626;
+  --background: #FAFAF9;
+  --card: #FFFFFF;
+  --border: #E7E5E4;
+  --muted: #A8A29E;
+  --text: #1C1917;
+  --text-secondary: #57534E;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--text);
+  margin: 0;
+}
+
+@media print {
+  body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .no-print { display: none !important; }
+}
