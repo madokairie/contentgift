@@ -26,7 +26,7 @@ npm install
 npm run dev
 ```
 
-ブラウザで http://localhost:3000 を開く。完了!
+ブラウザで http://localhost:3906 を開く。完了!
 
 > 画面右上の「📖 使い方」ボタンからアプリ内マニュアルも確認できます。
 

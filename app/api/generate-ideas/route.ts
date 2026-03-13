@@ -22,12 +22,34 @@ export async function POST(req: NextRequest) {
 - ターゲット: ${config.targetAudience || '未設定'}
 - ターゲットの悩み: ${config.targetPain || '未設定'}
 - ターゲットの理想: ${config.targetDesire || '未設定'}
+${config.targetKnowledgeLevel ? `- ターゲットの知識レベル: ${{beginner:'初心者（基礎から知りたい）',intermediate:'中級者（ある程度知っている）',advanced:'上級者（専門知識あり）'}[config.targetKnowledgeLevel as string]}` : ''}
+${config.targetUrgency ? `- ターゲットの緊急度: ${{low:'情報収集中（まだ検討段階）',medium:'検討中（近々行動したい）',high:'今すぐ欲しい（急いでいる）'}[config.targetUrgency as string]}` : ''}
 - 価格帯: ${config.price || '未設定'}
 - 用途: ${funnelLabel}
+${config.conversionGoal ? `- 達成したい目標: ${config.conversionGoal}` : ''}
 - 競合の特典: ${config.competitorGifts || '特になし'}
 - 特典後のアクション: ${config.desiredAction || '未設定'}
 - 発信者の権威性: ${config.currentAuthority || '未設定'}
 ${config.contentPreference !== 'any' ? `- 希望形式: ${config.contentPreference}` : '- 希望形式: 指定なし（最適な形式を提案）'}
+${config.conceptDesign ? `\n## コンセプト設計（他ツールで設計済み）\n${config.conceptDesign}` : ''}
+${config.funnelDesign ? `\n## ファネル設計（他ツールで設計済み）\n${config.funnelDesign}` : ''}
+${config.seminarContent ? `\n## セミナー内容（他ツールで設計済み）\n${config.seminarContent}` : ''}
+
+## ファネルステージ別の設計原則
+${config.funnelStage === 'list' ? `### リスト獲得用の設計原則
+- タイトルは「今すぐダウンロードしたい」と思わせる即効性のあるもの
+- メアド登録の心理的ハードルを超える「これが無料？」感を最大化
+- 特典単体で価値が完結する（登録して損した感ゼロ）
+- 受け取った直後に「この人のメルマガ読みたい」と思わせる権威性を織り込む` :
+config.funnelStage === 'seminar' ? `### セミナー着席率UP用の設計原則
+- 特典の中にセミナーの「予告・伏線」を自然に入れる（「この続きはセミナーで詳しくお話しします」）
+- 特典で得た成果をセミナーで更に加速できると思わせる設計
+- セミナーの日時・内容が気になって仕方ない状態を作る
+- 「特典だけで満足」にならないよう、次のステップへの好奇心を残す` :
+`### リスト獲得+セミナー着席率の両方を狙う設計原則
+- 特典で「この人すごい」→メルマガ登録。メルマガで「セミナーも気になる」→着席
+- 特典の中にセミナーへの伏線を2〜3箇所、自然に配置
+- 特典→メルマガ→セミナーの3ステップが途切れない導線設計`}
 
 ## 特典コンテンツの6つの要件（すべて満たすこと）
 1. **リスト獲得力**: 「今すぐ欲しい」と思わせるタイトルとフック
@@ -84,13 +106,27 @@ JSON内の文字列で改行が必要な場合は\\nを使うこと。
 - タイトルは具体的な数字や結果を含む（例:「30日で〇〇する7つのステップ」）
 - 「知識」より「ツール」として使える特典の方がリスト獲得力が高い
 - 競合と被らない切り口を意識する
-- totalスコアは6項目の平均×10で算出（四捨五入）。正直に評価すること`;
+- totalスコアは6項目の平均×10で算出（四捨五入）。正直に評価すること
 
-    const response = await client.messages.create({
+## 絶対に避ける特典の切り口（禁止）
+以下の切り口は受け手に刺さらないため、絶対に採用しないこと:
+- 「うまくいかない理由」「失敗する原因」「〇〇できない理由」系 → 人は理由より「より良い方法」を知りたい
+- 「〇〇の落とし穴」「〇〇の罠」等のネガティブ訴求 → 不安を煽るより希望を見せる
+- 「〇〇診断」で問題を突きつけるだけのもの → 診断するなら必ず「解決の道筋」をセットにする
+
+## 代わりに採用すべき切り口（推奨）
+- 「より良い方法」「最短ルート」「プロが実際にやっている方法」
+- 「すぐ使えるテンプレート」「コピペで完成する〇〇」
+- 「〇日で〇〇を達成するステップ」「初心者でもできる〇〇の始め方」
+- 「成功している人が共通してやっている〇〇」
+- 受け取った人が「これを使えば自分もできそう！」とワクワクするもの`;
+
+    const stream = await client.messages.stream({
       model: 'claude-sonnet-4-20250514',
       max_tokens: 8192,
       messages: [{ role: 'user', content: prompt }],
     });
+    const response = await stream.finalMessage();
 
     const text = response.content[0].type === 'text' ? response.content[0].text : '';
     let jsonStr = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();

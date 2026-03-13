@@ -109,11 +109,12 @@ JSON内の文字列で改行が必要な場合は\\nを使うこと。
 - 「もう少し具体的に」等の曖昧なフィードバックは禁止。「〇〇のセクションの『△△』を『□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□□』に書き換える」のように具体的に
 - rewriteSuggestionsは最低3つ提示すること`;
 
-    const response = await client.messages.create({
+    const stream = await client.messages.stream({
       model: 'claude-sonnet-4-20250514',
       max_tokens: 8192,
       messages: [{ role: 'user', content: prompt }],
     });
+    const response = await stream.finalMessage();
 
     const text = response.content[0].type === 'text' ? response.content[0].text : '';
     let jsonStr = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();

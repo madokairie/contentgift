@@ -17,12 +17,22 @@ export interface ProductConfig {
   targetAudience: string;
   targetPain: string;
   targetDesire: string;
+  targetKnowledgeLevel: 'beginner' | 'intermediate' | 'advanced' | '';
+  targetUrgency: 'low' | 'medium' | 'high' | '';
   price: string;
   funnelStage: 'list' | 'seminar' | 'both';
+  conversionGoal: string;
   competitorGifts: string;
   desiredAction: string;
   currentAuthority: string;
   contentPreference: ContentType | 'any';
+  // ブランドカラー（PDF出力用）
+  brandColorPrimary: string;
+  brandColorAccent: string;
+  // 他アプリからの情報（精度UP用）
+  conceptDesign: string;
+  funnelDesign: string;
+  seminarContent: string;
 }
 
 export const CONTENT_TYPE_LABELS: Record<ContentType, { label: string; icon: string }> = {

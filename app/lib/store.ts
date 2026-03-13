@@ -30,12 +30,20 @@ const defaultConfig: ProductConfig = {
   targetAudience: '',
   targetPain: '',
   targetDesire: '',
+  targetKnowledgeLevel: '',
+  targetUrgency: '',
   price: '',
   funnelStage: 'list',
+  conversionGoal: '',
   competitorGifts: '',
   desiredAction: '',
   currentAuthority: '',
   contentPreference: 'any',
+  brandColorPrimary: '#1B2A4A',
+  brandColorAccent: '#C8963E',
+  conceptDesign: '',
+  funnelDesign: '',
+  seminarContent: '',
 };
 
 export function createProject(name: string): ContentGiftProject {
